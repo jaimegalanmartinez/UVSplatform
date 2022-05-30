@@ -49,3 +49,6 @@
 
 # Firebase options
 /uvsp_app/lib/firebase_options.dart
+
+#BACKEND
+/backend/node_modules
