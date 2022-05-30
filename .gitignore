@@ -1,0 +1,51 @@
+#UVSP APP
+# Miscellaneous
+/uvsp_app/*.class
+/uvsp_app/*.log
+/uvsp_app/*.pyc
+/uvsp_app/*.swp
+/uvsp_app/.DS_Store
+/uvsp_app/.atom/
+/uvsp_app/.buildlog/
+/uvsp_app/.history
+/uvsp_app/.svn/
+/uvsp_app/migrate_working_dir/
+
+# IntelliJ related
+/uvsp_app/*.iml
+/uvsp_app/*.ipr
+/uvsp_app/*.iws
+/uvsp_app/.idea/
+
+# The .vscode folder contains launch configuration and tasks you configure in
+# VS Code which you may wish to be included in version control, so this line
+# is commented out by default.
+#.vscode/
+
+# Flutter/Dart/Pub related
+/uvsp_app/**/doc/api/
+/uvsp_app/**/ios/Flutter/.last_build_id
+/uvsp_app/.dart_tool/
+/uvsp_app/.flutter-plugins
+/uvsp_app/.flutter-plugins-dependencies
+/uvsp_app/.packages
+/uvsp_app/.pub-cache/
+/uvsp_app/.pub/
+/uvsp_app/build/
+
+# Web related
+/uvsp_app/lib/generated_plugin_registrant.dart
+
+# Symbolication related
+/uvsp_app/app.*.symbols
+
+# Obfuscation related
+/uvsp_app/app.*.map.json
+
+# Android Studio will place build artifacts here
+/uvsp_app/android/app/debug
+/uvsp_app/android/app/profile
+/uvsp_app/android/app/release
+
+# Firebase options
+/uvsp_app/lib/firebase_options.dart

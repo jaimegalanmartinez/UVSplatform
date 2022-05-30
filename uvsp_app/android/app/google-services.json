@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "315433304397",
+    "project_id": "uvs-platform",
+    "storage_bucket": "uvs-platform.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:315433304397:android:c06475cc20894c98bd7704",
+        "android_client_info": {
+          "package_name": "com.jaimegalanmartinez.uvsp_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "315433304397-4mad8ice8vv0tclt07skash51n0jhq15.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA8CkwEBlInabf4GTXMbUSNU-gyTSLvBNQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "315433304397-4mad8ice8vv0tclt07skash51n0jhq15.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
