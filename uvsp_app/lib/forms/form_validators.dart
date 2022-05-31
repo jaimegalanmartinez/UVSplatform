@@ -45,8 +45,8 @@ String? Function(String?)? validateUsername = (String? inputUsername) {
   if (inputUsername!.isEmpty){
     return 'Please enter a username';
 
-  }else if(inputUsername.length < 6){
-    return 'Username must have at least 6 characters';
+  }else if(inputUsername.length < 4){
+    return 'Username must have at least 4 characters';
 
   }else if (inputUsername.length > 20){
     return 'Username is too long';

@@ -1,8 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:uvsp_app/forms/form_validators.dart';
 import 'package:uvsp_app/screens/home_screen.dart';
+import 'package:uvsp_app/screens/login_screen.dart';
 
 import 'package:uvsp_app/utils/constants.dart';
 
@@ -16,6 +18,7 @@ class SignUpForm extends StatefulWidget {
 
 class _SignUpFormState extends State<SignUpForm> {
   final _formKey = GlobalKey<FormState>();
+  final _auth = FirebaseAuth.instance;
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPassController = TextEditingController();
   late String _userEmail;
@@ -30,24 +33,6 @@ class _SignUpFormState extends State<SignUpForm> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          TextFormField(
-            decoration: InputDecoration(
-              icon: const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Icon(Icons.person),
-              ),
-              border: OutlineInputBorder(
-                borderSide: const BorderSide(),
-                borderRadius: BorderRadius.circular(20.0),
-              ),
-              hintText: 'Username',
-            ),
-            validator: validateUsername,
-            onSaved: (value) => _username = value!,
-          ),
-          const SizedBox(
-            height: 12.0,
-          ),
           TextFormField(
             decoration: InputDecoration(
               icon: const Padding(
@@ -122,26 +107,28 @@ class _SignUpFormState extends State<SignUpForm> {
             style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
                 minimumSize: MaterialStateProperty.all<Size>(const Size(140, 40))),
-            onPressed: () {
+            onPressed: () async {
               //Validate returns true if the form is valid, or false otherwise.
+
               if (_formKey.currentState!.validate()) {
                 _formKey.currentState?.save();
-                ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Processing login data')));
                 if (kDebugMode) {
                   print('User email: $_userEmail with password: $_userPassword');
                 }
-                //Just for example to go to Home Screen
-                if (_userEmail == 'test@gmail.com' &&
-                    _userPassword == '1aQ!test') {
-                  Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                          builder: (BuildContext context) =>
-                          const MyHomePage(title: 'UVS Platform')),
-                          (Route<dynamic> route) => false);
-                }
-              }
+                  final newUserCredential = await _auth.createUserWithEmailAndPassword(email: _userEmail.trim(), password: _userPassword.trim()).then((value) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Successfully registered. You can login now')));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginScreen()));
+                  }).onError((FirebaseAuthException error, stackTrace) {
+                     if (kDebugMode) {
+                       print("Error ${error.toString()}");
+                     }
+                     showDialog(context: context, builder: (context) => AlertDialog(
+                       title: const Text('Registration failed'),
+                       content: Text(error.message ?? 'Unknown error'),
+                     ));
+                  });
+              } //end if validate form
             },
             child: const Text(
               'Sign up',

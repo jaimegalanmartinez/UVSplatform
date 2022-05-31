@@ -53,7 +53,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         context,
                         MaterialPageRoute(
                             builder: (BuildContext context) =>
-                            const MyHomePage(title: 'Home',)));
+                            const HomeScreen(title: 'Home',)));
                   },
                   child: const Text(
                     'Forgot password?',

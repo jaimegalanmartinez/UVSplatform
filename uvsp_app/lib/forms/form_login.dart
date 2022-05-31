@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:uvsp_app/forms/form_validators.dart';
@@ -14,7 +15,7 @@ class LoginForm extends StatefulWidget {
 
 class _LoginFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormState>();
-
+  final _auth = FirebaseAuth.instance;
   late String _userEmail;
   late String _userPassword;
 
@@ -67,24 +68,25 @@ class _LoginFormState extends State<LoginForm> {
             style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
                 minimumSize: MaterialStateProperty.all<Size>(const Size(140, 40))),
-            onPressed: () {
+            onPressed: () async {
               //Validate returns true if the form is valid, or false otherwise.
               if (_formKey.currentState!.validate()) {
                 _formKey.currentState?.save();
-                ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Processing login data')));
-                print('User email: $_userEmail with password: $_userPassword');
-                //Just for example to go to Home Screen
-                if (_userEmail == 'test@gmail.com' &&
-                    _userPassword == '1aQ!test') {
-                  Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                          builder: (BuildContext context) =>
-                              const MyHomePage(title: 'UVS Platform')),
-                          (Route<dynamic> route) => false);
+                if (kDebugMode) {
+                  print('User email: $_userEmail with password: $_userPassword');
                 }
-              }
+                final newUserCredential = await _auth.signInWithEmailAndPassword(email: _userEmail.trim(), password: _userPassword.trim()).then((value) {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const HomeScreen(title: 'UVS Platform')));
+                }).onError((FirebaseAuthException error, stackTrace) {
+                  if (kDebugMode) {
+                    print("Error ${error.toString()}");
+                  }
+                  showDialog(context: context, builder: (context) => AlertDialog(
+                    title: const Text('Login failed'),
+                    content: Text(error.message ?? 'Unknown error'),
+                  ));
+                });
+              } //end if validate form
             },
             child: const Text(
               'Login',
