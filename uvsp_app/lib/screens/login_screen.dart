@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:uvsp_app/screens/home_screen.dart';
 import 'package:uvsp_app/forms/form_login.dart';
+import 'package:uvsp_app/screens/reset_password_screen.dart';
 import 'package:uvsp_app/screens/signup_screen.dart';
 import 'package:uvsp_app/utils/constants.dart';
 
@@ -47,17 +47,18 @@ class _LoginScreenState extends State<LoginScreen> {
                     style: kLabelForgotPassword,
                   )),
               const SizedBox(height: 10,),
-              TextButton(
-                  onPressed: () {
+              GestureDetector(
+                  onTap: () {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (BuildContext context) =>
-                            const HomeScreen(title: 'Home',)));
+                            const ResetPasswordScreen()));
                   },
                   child: const Text(
                     'Forgot password?',
-                    style: kLabelForgotPassword,
+                    style: TextStyle(decoration: TextDecoration.underline,
+                    fontWeight: FontWeight.bold, fontSize: 16.0, color: Colors.blue),
                   ))
             ],)
           ],
