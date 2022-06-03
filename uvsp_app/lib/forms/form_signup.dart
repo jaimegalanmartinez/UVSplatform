@@ -3,9 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:uvsp_app/forms/form_validators.dart';
-import 'package:uvsp_app/screens/home_screen.dart';
 import 'package:uvsp_app/screens/login_screen.dart';
-
 import 'package:uvsp_app/utils/constants.dart';
 
 
@@ -24,7 +22,6 @@ class _SignUpFormState extends State<SignUpForm> {
   late String _userEmail;
   late String _username;
   late String _userPassword;
-  late String _confirmPassword;
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +30,24 @@ class _SignUpFormState extends State<SignUpForm> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
+          TextFormField(
+            decoration: InputDecoration(
+              icon: const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Icon(Icons.person),
+              ),
+              border: OutlineInputBorder(
+                borderSide: const BorderSide(),
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+              hintText: 'Username',
+            ),
+            validator: validateUsername,
+            onSaved: (value) => _username = value!,
+          ),
+          const SizedBox(
+            height: 12.0,
+          ),
           TextFormField(
             decoration: InputDecoration(
               icon: const Padding(
@@ -98,7 +113,6 @@ class _SignUpFormState extends State<SignUpForm> {
               }
             },
             obscureText: true,
-            onSaved: (value) => _confirmPassword = value!,
           ),
           const SizedBox(
             height: 12.0,
@@ -115,7 +129,8 @@ class _SignUpFormState extends State<SignUpForm> {
                 if (kDebugMode) {
                   print('User email: $_userEmail with password: $_userPassword');
                 }
-                  final newUserCredential = await _auth.createUserWithEmailAndPassword(email: _userEmail.trim(), password: _userPassword.trim()).then((value) {
+                  await _auth.createUserWithEmailAndPassword(email: _userEmail.trim(), password: _userPassword.trim()).then((newUserCredential) {
+                    newUserCredential.user?.updateDisplayName(_username);
                     ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Successfully registered. You can login now')));
                     Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginScreen()));
