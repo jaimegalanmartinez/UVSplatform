@@ -1,23 +1,22 @@
-
-//https://bravedeveloper.com/2021/03/22/crear-un-api-rest-con-nodejs-y-express-nunca-fue-tan-provechoso-y-sencillo/
-
-const express = require('express');
-const app = express();
-const morgan = require ('morgan');
-
-//Setup
-app.set('port', process.env.PORT || 3000);
-app.set('json spaces', 2);
-
-//Middleware
-app.use(morgan('dev'));
-app.use(express.urlencoded({extended:false}));
-app.use(express.json());
-
-//Routes
-app.use(require('./routes/index'));
+import app from './app.js';
+import './database.js';
 
 //Starting server, listening on port 3000 ...
-app.listen(app.get('port'), () => {
+const server = app.listen(app.get('port'), () => {
     console.log(`HTTP server listening on port ${app.get('port')}`);
+});
+
+var gracefulExit = () => { 
+    database.connection.close( () => {
+      console.log('Mongoose default connection with DB is disconnected through app termination');
+      console.log('Disconnected from CosmosDB');
+      process.exit(0);
+    });
+  }
+
+process.on('SIGINT', function(){
+    server.close((err) => {  
+        console.log('Mission manager closed')
+        process.exit(err ? 1 : 0)
+    });
 });

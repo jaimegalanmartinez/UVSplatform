@@ -52,3 +52,5 @@
 
 #BACKEND
 /backend/node_modules
+/backend/src/.env
+/backend/uvs-platform-firebase-adminsdk-d8xgy-f7c7b6a484.json

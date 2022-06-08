@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:uvsp_app/screens/login_screen.dart';
+import 'package:http/http.dart' as http;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key, required this.title}) : super(key: key);
@@ -22,7 +26,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final currentUser = FirebaseAuth.instance.currentUser;
-
+  String userToken = "";
+  String username = "";
   Future<void> _signOut() async {
     await FirebaseAuth.instance.signOut().then((value) => {
           Navigator.pushReplacement(context,
@@ -30,13 +35,43 @@ class _HomeScreenState extends State<HomeScreen> {
         });
   }
 
+  Future<void> _getFirebaseToken() async {
+    await currentUser!.getIdTokenResult().then((result) => userToken = result.token!);
+    if (kDebugMode) {
+      print(userToken);
+    }
+  }
+  Future<String> fetchInfo() async {
+    final response = await http.get(Uri.parse("http://localhost/api/v1/missions/getMissionsAvailables"),
+    headers: {
+      HttpHeaders.authorizationHeader: 'Bearer $userToken',
+    });
+    if (response.statusCode == 200){
+      //If the server did return a 200 OK response,
+      //then parse the JSON.
+      //return Album.fromJson(jsonDecode(response.body));
+      if (kDebugMode) {
+        print(response.body);
+      }
+      return response.body;
+    }else {
+      throw Exception('Failed to load the info requested');
+    }
+  }
+
+  @override
+  void initState(){
+    super.initState();
+    username = currentUser?.displayName ?? 'No user';
+    username = username.replaceFirst(username[0], username[0].toUpperCase());
+    _getFirebaseToken();
+  }
+
   @override
   Widget build(BuildContext context) {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
-    String username = currentUser?.displayName ?? 'No user';
-    username = username.replaceFirst(username[0], username[0].toUpperCase());
 
     return Scaffold(
       appBar: AppBar(
@@ -81,7 +116,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           color: Colors.white),
                       semanticsLabel: 'user logged in',
                     ))),
-              ))
+              )),
+          ElevatedButton(onPressed: () async => fetchInfo(), child: const Text('API request'))
         ],
       ),
     );
