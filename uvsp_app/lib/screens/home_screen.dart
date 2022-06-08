@@ -37,12 +37,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _getFirebaseToken() async {
     await currentUser!.getIdTokenResult().then((result) => userToken = result.token!);
-    if (kDebugMode) {
-      print(userToken);
-    }
+
   }
   Future<String> fetchInfo() async {
-    final response = await http.get(Uri.parse("http://localhost/api/v1/missions/getMissionsAvailables"),
+    final response = await http.get(Uri.parse("http://192.168.1.14:3000/api/v1/missions/getMissionsAvailables"),
     headers: {
       HttpHeaders.authorizationHeader: 'Bearer $userToken',
     });

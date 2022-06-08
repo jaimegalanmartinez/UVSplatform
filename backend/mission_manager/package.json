@@ -1,5 +1,5 @@
 {
-  "name": "backend",
+  "name": "mission_manager",
   "version": "1.0.0",
   "description": "UVS Platform backend",
   "main": "index.js",

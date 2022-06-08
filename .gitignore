@@ -51,6 +51,9 @@
 /uvsp_app/lib/firebase_options.dart
 
 #BACKEND
-/backend/node_modules
-/backend/src/.env
-/backend/uvs-platform-firebase-adminsdk-d8xgy-f7c7b6a484.json
+# Mission Manager
+/backend/mission_manager/node_modules
+/backend/mission_manager/src/.env
+/backend/mission_manager/uvs-platform-firebase-adminsdk-d8xgy-f7c7b6a484.json
+#Vehicle manager
+/backend/vehicle_manager/node_modules
