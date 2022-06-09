@@ -30,4 +30,7 @@ router.get('/missions/getStatus',FirebaseMiddleware.authenticateJWT, MissionMana
 // Get missions availables for an unmanned vehicle
 router.get('/missions/getMissionsAvailables', FirebaseMiddleware.authenticateJWT, MissionManager.getMissionsAvailables);
 
+// Get vehicles availables for requesting a mission
+router.get('/missions/vehiclesAvailables', FirebaseMiddleware.authenticateJWT, MissionManager.getVehiclesAvailables);
+
 export default router;

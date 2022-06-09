@@ -1,4 +1,5 @@
 import Mission from "../models/Mission.js"
+import axios from 'axios';
 
 export const getAllMissions = async (req, res) => {
     const missions = await Mission.find()
@@ -30,6 +31,8 @@ export const requestMission = async (req, res) => {
         }
     );
 
+    //Send mission plan to Vehicle Manager
+
 }
 
 export const abortMission = async (req, res) => {
@@ -56,5 +59,27 @@ export const getMissionsAvailables = async (req, res) => {
             "Title": "UVS Platform"
         }
     );
+
+}
+
+export const getVehiclesAvailables = async (req, res) => {
+    const urlVehicleManager = 'http://localhost:3001';
+    try{
+        const response = await axios({
+            method: 'get',
+            url: urlVehicleManager + '/api/v1/vehicles/checkAvailability',
+            responseType: 'json'
+        });
+
+        if (response.status == 200){
+            console.log(response.data);
+            //Returns JSON Array with all the vehicles availables
+            res.json(response.data);
+        }
+
+    }catch(err){
+        console.error(err);
+
+    } 
 
 }

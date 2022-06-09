@@ -40,7 +40,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   }
   Future<String> fetchInfo() async {
-    final response = await http.get(Uri.parse("http://192.168.1.14:3000/api/v1/missions/getMissionsAvailables"),
+    const String uriMissionManager = "http://192.168.1.14:3000";
+    final response = await http.get(Uri.parse("$uriMissionManager/api/v1/missions/vehiclesAvailables"),
     headers: {
       HttpHeaders.authorizationHeader: 'Bearer $userToken',
     });

@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const vehicleSchema = new mongoose.Schema({
     fleet_id: {
-        type: Number,
+        type: mongoose.SchemaTypes.ObjectId, ref: 'fleets',
         required: true,
         trim: true
     },
@@ -42,7 +42,9 @@ const vehicleSchema = new mongoose.Schema({
 
 }, {
     versionKey: false,
-    timestamps: true
+    timestamps: true,
+    collection: "vehicles"
 });
+
 
 export default mongoose.model('Vehicles', vehicleSchema);

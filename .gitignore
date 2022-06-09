@@ -57,3 +57,4 @@
 /backend/mission_manager/uvs-platform-firebase-adminsdk-d8xgy-f7c7b6a484.json
 #Vehicle manager
 /backend/vehicle_manager/node_modules
+/backend/vehicle_manager/src/.env
