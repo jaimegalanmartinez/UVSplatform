@@ -27,16 +27,22 @@ class _LoginFormState extends State<LoginForm> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           TextFormField(
+            style: const TextStyle(color:Colors.black),
+            cursorColor: const Color.fromRGBO(58, 66, 86, 1.0),
             decoration: InputDecoration(
+              filled: true,
+              fillColor: Colors.white,
               icon: const Padding(
                 padding: EdgeInsets.all(8.0),
-                child: Icon(Icons.email),
+                child: Icon(Icons.email, color: Colors.white,),
               ),
               border: OutlineInputBorder(
-                borderSide: const BorderSide(),
+                borderSide: const BorderSide(color: Colors.white),
                 borderRadius: BorderRadius.circular(20.0),
               ),
               hintText: 'Email',
+              hintStyle: const TextStyle(color: Colors.grey),
+              errorStyle: const TextStyle(color: Colors.deepOrangeAccent),
             ),
             validator: validateEmail,
             onSaved: (value) => _userEmail = value!,
@@ -45,17 +51,23 @@ class _LoginFormState extends State<LoginForm> {
             height: 12.0,
           ),
           TextFormField(
+            style: const TextStyle(color: Colors.black),
+            cursorColor: const Color.fromRGBO(58, 66, 86, 1.0),
             decoration: InputDecoration(
+              filled: true,
+              fillColor: Colors.white,
               icon: const Padding(
                 padding: EdgeInsets.all(8.0),
-                child: Icon(Icons.lock),
+                child: Icon(Icons.lock, color: Colors.white,),
               ),
               border: OutlineInputBorder(
-                borderSide: const BorderSide(),
+                borderSide: const BorderSide(color: Colors.white),
                 borderRadius: BorderRadius.circular(20.0),
               ),
               hintText: 'Password',
+              hintStyle: const TextStyle(color: Colors.grey),
               errorMaxLines: 3,
+              errorStyle: const TextStyle(color: Colors.deepOrangeAccent),
             ),
             validator: validatePassword,
             obscureText: true,
@@ -66,7 +78,7 @@ class _LoginFormState extends State<LoginForm> {
           ),
           ElevatedButton(
             style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+                backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
                 minimumSize: MaterialStateProperty.all<Size>(const Size(140, 40))),
             onPressed: () async {
               //Validate returns true if the form is valid, or false otherwise.

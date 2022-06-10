@@ -20,9 +20,11 @@ class MyApp extends StatelessWidget {
       title: 'UVS Platform',
       theme: ThemeData(
         // This is the theme of your application.
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.grey,
         appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.blue,
+          //backgroundColor: Color.fromRGBO(94, 106, 135, 1.0),
+          backgroundColor: Color.fromRGBO(71, 82, 107, 1.0),
+          foregroundColor: Colors.white,
         )
       ),
       home: const LoginScreen(),

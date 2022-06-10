@@ -17,12 +17,12 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       //Container by default with white colour background, you can change the color or use a gradient.
-      backgroundColor: Colors.white,
+      backgroundColor: const Color.fromRGBO(58, 66, 86, 1.0),
       body: Container(
         margin: const EdgeInsets.all(16.0),
         height: double.infinity,
         width: double.infinity,
-        decoration: const BoxDecoration(color: Colors.white),
+        decoration: const BoxDecoration(color: Color.fromRGBO(58, 66, 86, 1.0)),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -44,7 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   },
                   child: const Text(
                     'Don\'t have an account? Sign up',
-                    style: kLabelForgotPassword,
+                    style: kLabelForgotPasswdAlreadyAcc,
                   )),
               const SizedBox(height: 10,),
               GestureDetector(
@@ -58,7 +58,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: const Text(
                     'Forgot password?',
                     style: TextStyle(decoration: TextDecoration.underline,
-                    fontWeight: FontWeight.bold, fontSize: 16.0, color: Colors.blue),
+                    fontWeight: FontWeight.bold, fontSize: 16.0, color: Colors.white),
                   ))
             ],)
           ],

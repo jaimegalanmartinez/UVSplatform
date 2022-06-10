@@ -79,6 +79,7 @@ export const getVehiclesAvailables = async (req, res) => {
 
     }catch(err){
         console.error(err);
+        
 
     } 
 
