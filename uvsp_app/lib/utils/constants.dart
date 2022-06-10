@@ -11,3 +11,6 @@ TextStyle(decoration: TextDecoration.underline,fontWeight: FontWeight.bold, font
 //Login Form
 const kLabelLoginSignUpStyle =
 TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, color: Color.fromRGBO(58, 66, 86, 1.0));
+//Reset password screen
+const kLabelSendStyle =
+TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0, color: Color.fromRGBO(58, 66, 86, 1.0));

@@ -105,12 +105,18 @@ class _HomeScreenState extends State<HomeScreen> {
     return FutureBuilder<List<Vehicle>>(
       future: getVehiclesAvailables(userToken),
       builder: (context, snapshot) {
-        if(snapshot.connectionState == ConnectionState.done){
+       // if(snapshot.connectionState == ConnectionState.done){
+        if (snapshot.hasData){
           final List<Vehicle>? vehiclesAvailables = snapshot.data;
+          print("hola");
+          print(snapshot.data);
           return Expanded(child: _buildListVehicles(context, vehiclesAvailables!),);
 
         }else if(snapshot.hasError){
-          return SizedBox(height: 75, width: 75, child: Text('Error: ${snapshot.error}'));
+          return Container(height: 75, width: 300, color: Colors.white, child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Center(child: Text('Error -> ${snapshot.error}', style: const TextStyle(color: Color.fromRGBO(58, 66, 86, 1.0)),)),
+          ));
 
         } else {
           return Center(child: Column(children: const [

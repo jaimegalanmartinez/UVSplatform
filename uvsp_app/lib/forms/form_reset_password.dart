@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:uvsp_app/forms/form_validators.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-const kLabelSendStyle =
-TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0, color: Colors.white);
+import '../utils/constants.dart';
+
+
 
 class FormResetPassword extends StatefulWidget {
   const FormResetPassword({Key? key}) : super(key: key);
@@ -44,16 +45,23 @@ class _FormResetPasswordState extends State<FormResetPassword> {
         ),
         TextFormField(
           controller: _emailController,
+          style: const TextStyle(color: Colors.black),
+          cursorColor: const Color.fromRGBO(58, 66, 86, 1.0),
           decoration: InputDecoration(
+            filled: true,
+            fillColor: Colors.white,
             icon: const Padding(
               padding: EdgeInsets.all(8.0),
-              child: Icon(Icons.email),
+              child: Icon(Icons.email, color: Colors.white,),
             ),
             border: OutlineInputBorder(
               borderSide: const BorderSide(),
               borderRadius: BorderRadius.circular(20.0),
             ),
             hintText: 'Type email to send password reset',
+              hintStyle: const TextStyle(color: Colors.grey),
+              errorMaxLines: 3,
+              errorStyle: const TextStyle(color: Colors.deepOrangeAccent)
           ),
           validator: validateEmail,
           onSaved: (value) => _emailToSendReset = value!,
@@ -63,7 +71,7 @@ class _FormResetPasswordState extends State<FormResetPassword> {
         ),
         ElevatedButton(
             style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+                backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
                 minimumSize: MaterialStateProperty.all<Size>(const Size(160, 64))),
             onPressed: () {
               //Validate returns true if the form is valid, or false otherwise.

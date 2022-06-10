@@ -15,12 +15,12 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
         appBar: AppBar(
           title: const Text('Reset password'),
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: const Color.fromRGBO(58, 66, 86, 1.0),
         body: Container(
             margin: const EdgeInsets.all(16.0),
             height: double.infinity,
             width: double.infinity,
-            decoration: const BoxDecoration(color: Colors.white),
+            decoration: const BoxDecoration(color: Color.fromRGBO(58, 66, 86, 1.0)),
             child: const FormResetPassword()));
   }
 

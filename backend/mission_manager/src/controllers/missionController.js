@@ -79,6 +79,23 @@ export const getVehiclesAvailables = async (req, res) => {
 
     }catch(err){
         console.error(err);
+        if(axios.isAxiosError(err)){
+            if(err.response) {
+                //Request mae and server responded with error
+                // The client was given an error response (5xx, 4xx)
+                console.error(err.response);
+            } else if (err.request){
+                // Request was made but no response received
+                // The client never received a response, and the request was never left
+                console.error(err.request);
+                res.status(503).json("Vehicle manager server time out")
+
+            } else {
+                //Something happended in setting up the request that triggered an Error
+                console.error(err);
+
+            }
+        }
         
 
     } 
