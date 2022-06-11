@@ -13,13 +13,15 @@ class Vehicle {
   final VehicleStatus status;
   final String name;
   final int battery;
+  final String fleetName;
 
   const Vehicle({
     required this.id,
     required this.type,
     required this.status,
     required this.name,
-    required this.battery
+    required this.battery,
+    required this.fleetName
   });
 
   factory Vehicle.fromJson(Map<String, dynamic> json){
@@ -29,7 +31,8 @@ class Vehicle {
         type: VehicleType.values.byName(json['vehicle_type'].toString().toLowerCase()),
         status: VehicleStatus.values.byName(json['vehicle_status']),
         name: json['vehicle_name'],
-        battery: json['battery']);
+        battery: json['battery'],
+        fleetName: json['fleet_id']['fleet_name']);
   }
 
 }

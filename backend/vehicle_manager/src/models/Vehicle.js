@@ -2,9 +2,8 @@ import mongoose from "mongoose";
 
 const vehicleSchema = new mongoose.Schema({
     fleet_id: {
-        type: mongoose.SchemaTypes.ObjectId, ref: 'fleets',
+        type: mongoose.SchemaTypes.ObjectId, ref: 'Fleets',
         required: true,
-        trim: true
     },
 
     vehicle_id: {

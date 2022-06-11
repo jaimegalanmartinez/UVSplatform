@@ -1,9 +1,9 @@
 import Vehicle from "../models/Vehicle.js"
-//import Fleet from "../models/Fleet.js"
-
+import Fleet from "../models/Fleet.js"
+import mongoose from "mongoose";
 
 const vehicleData = {
-    fleet_id: 1,
+    fleet_id: mongoose.mongo.ObjectId("62a4b9fdaec3727326e3069a"),
     vehicle_id: 1,
     vehicle_type: "UAV",
     vehicle_status: "idle",
@@ -20,6 +20,15 @@ const vehicle2Data = {
     battery: 80,
 };
 
+const fleetData = {
+    fleet_name: "Fleet_Webots",
+    location: "Farm_001",
+    fleet_vehicles: [
+        mongoose.mongo.ObjectId("62a1a84f20092252107b42ed")
+    ]
+
+};
+const newFleet = new Fleet(fleetData);
 const newVehicle = new Vehicle(vehicle2Data);
 /*newVehicle.save((error) => {
     if (error){
@@ -49,7 +58,7 @@ export const getVehicleInformation = async (req, res) => {
   
 
 export const checkAvailability = async (req, res) => {
-    Vehicle.find({ vehicle_status: "idle"})
+    Vehicle.find({ vehicle_status: "idle"}).populate({path:"fleet_id", select:'fleet_name'})
     .then((data) =>{
         console.log('Data', data);
         res.json(data);
@@ -86,10 +95,25 @@ export const updateFleetVehicles = async (req, res) => {
 }
 
 export const abortMission = async (req, res) => {
-    res.json(
-        {
-            "Title": "UVS Platform"
+    /*await Fleet.find({ fleet_name: "Fleet_Webots"}).populate({path: "fleet_vehicles"}).then((data) => {
+        res.json(data);
+    });*/
+    /*Vehicle.findByIdAndUpdate("62a1aaf7d063093f592cae21", {fleet_id: mongoose.mongo.ObjectId("62a4b9fdaec3727326e3069a")}, function (err, docs){
+        if (err){
+            console.log(err);
+        }else{
+            console.log("Updated user: ", docs);
         }
-    );
+
+    });*/
+    /*newFleet.save((error) => {
+        if (error){
+            res.status(500).json("Internal server error");
+            console.log('Error, saving vehicle data', error);
+        }else{
+            console.log('Fleet data has been saved');
+        }
+    });*/
+   
 
 }

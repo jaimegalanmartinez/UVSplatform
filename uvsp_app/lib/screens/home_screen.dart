@@ -1,15 +1,10 @@
-import 'dart:convert';
-import 'dart:io';
-
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:uvsp_app/models/Vehicle.dart';
 import 'package:uvsp_app/screens/login_screen.dart';
-import 'package:http/http.dart' as http;
-
 import 'package:uvsp_app/services/http_service.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+import '../widgets/list_vehicles.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key, required this.title}) : super(key: key);
 
@@ -29,99 +24,76 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final currentUser = FirebaseAuth.instance.currentUser;
-  String userToken = "";
+
   String username = "";
   final HttpService httpService = HttpService();
-  late Future<List<Vehicle>> vehiclesAvailables;
+  late Future<List<Vehicle>> _vehiclesAvailablesList;
 
   Future<void> _signOut() async {
-    await FirebaseAuth.instance.signOut().then((value) => {
+    await httpService.getAuth.signOut().then((value) => {
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) => const LoginScreen()))
         });
   }
 
-  Future<void> _getFirebaseToken() async {
-    await currentUser!
-        .getIdTokenResult()
-        .then((result) => userToken = result.token!);
-  }
-  Future<List<Vehicle>> getVehiclesAvailables(String userToken) async {
-    //https://mobikul.com/http-api-calling-in-flutter/
-    final auth = await currentUser!.getIdTokenResult();
-    userToken = auth.token!;
-    const String uriMissionManager = "http://192.168.1.14:3000";
-    final response = await http.get(Uri.parse("$uriMissionManager/api/v1/missions/vehiclesAvailables"),
-        headers: {
-          HttpHeaders.authorizationHeader: 'Bearer $userToken',
-        });
-    if (response.statusCode == 200){
-      //If the server did return a 200 OK response,
-      //then parse the JSON.
-      //return Album.fromJson(jsonDecode(response.body));
-      List<dynamic> body = jsonDecode(response.body);
-      List<Vehicle> vehiclesAvailables = body.map(
-            (dynamic vehicleJSON) => Vehicle.fromJson(vehicleJSON),
-      ).toList();
-
-      if (kDebugMode) {
-        print('Vehicles retrieved: ${vehiclesAvailables.length}');
-      }
-
-      if (kDebugMode) {
-        print(vehiclesAvailables.first.name);
-      }
-      return vehiclesAvailables;
-    }else {
-      throw Exception('Unable to retrieve vehicles availables');
-    }
+  Future<void> _refreshListVehicles() async {
+    //Rebuild UI
+    setState(() {
+      _vehiclesAvailablesList = httpService.getVehiclesAvailables();
+    });
   }
 
-  ListView _buildListVehicles(BuildContext context, List<Vehicle> vehicles) {
-    return ListView.builder(
-      itemCount: vehicles.length,
-      padding: const EdgeInsets.all(8),
-      itemBuilder: (context, index) {
-        return Card(
-          elevation: 4,
-          child: ListTile(
-            leading: vehicles[index].type == VehicleType.uav ?
-            Image.asset('assets/images/drone.png', color: const Color.fromRGBO(71, 82, 107, 1.0), height: 40,width: 40,):
-            Image.asset('assets/images/ugv.png', color: const Color.fromRGBO(71, 82, 107, 1.0), height: 45,width: 45),
-            title: Text(
-              vehicles[index].name,
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-            subtitle: Text('Status: ${vehicles[index].status.name}'),
-          ),
-        );
-      },
-    );
-  }
-
-  FutureBuilder<List<Vehicle>> _builderListVehicles(
-      BuildContext context) {
+  FutureBuilder<List<Vehicle>> _builderListVehicles(BuildContext context) {
     return FutureBuilder<List<Vehicle>>(
-      future: getVehiclesAvailables(userToken),
+      future: _vehiclesAvailablesList,
       builder: (context, snapshot) {
-       // if(snapshot.connectionState == ConnectionState.done){
-        if (snapshot.hasData){
+        // if(snapshot.connectionState == ConnectionState.done){
+        if (snapshot.hasData) {
           final List<Vehicle>? vehiclesAvailables = snapshot.data;
           print("hola");
           print(snapshot.data);
-          return Expanded(child: _buildListVehicles(context, vehiclesAvailables!),);
-
-        }else if(snapshot.hasError){
-          return Container(height: 75, width: 300, color: Colors.white, child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Center(child: Text('Error -> ${snapshot.error}', style: const TextStyle(color: Color.fromRGBO(58, 66, 86, 1.0)),)),
-          ));
-
+          return Expanded(
+            child: RefreshIndicator(
+                color: const Color.fromRGBO(58, 66, 86, 1.0),
+                onRefresh: () async {
+                  _refreshListVehicles();
+                },
+                child: buildListVehicles(context, vehiclesAvailables!)),
+          );
+        } else if (snapshot.hasError) {
+          return RefreshIndicator(color: const Color.fromRGBO(58, 66, 86, 1.0),
+            onRefresh: () async {
+              _refreshListVehicles();
+            },
+            child: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              child: Container(
+                  height: 100,
+                  width: 300,
+                  color: Colors.white,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                        child: Center(
+                            child: Text(
+                          'Error ->${snapshot.error}',
+                          style: const TextStyle(
+                              fontSize: 16.0,
+                              color: Color.fromRGBO(58, 66, 86, 1.0)),
+                        ))),
+                  ),
+            ),
+          );
         } else {
-          return Center(child: Column(children: const [
+          return Center(
+              child: Column(children: const [
             SizedBox(height: 200),
-            SizedBox(height: 75, width: 75, child: CircularProgressIndicator(strokeWidth: 6.0, color: Colors.white70,)),
+            SizedBox(
+                height: 75,
+                width: 75,
+                child: CircularProgressIndicator(
+                  strokeWidth: 6.0,
+                  color: Colors.white70,
+                )),
           ]));
         }
       },
@@ -131,11 +103,9 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    username = currentUser?.displayName ?? 'No user';
+    username = httpService.getCurrentUser?.displayName ?? 'No user';
     username = username.replaceFirst(username[0], username[0].toUpperCase());
-    //_getFirebaseToken();
-    //getVehiclesAvailables(userToken);
-
+    _vehiclesAvailablesList = httpService.getVehiclesAvailables();
   }
 
   @override
