@@ -62,6 +62,15 @@ class UVS_controller : public rclcpp::Node
     }
 
     void measure_mission(){
+      /*
+      NAV_TAKEOFF - Automatically
+      NAV_WAYPOINT
+      //In place for measure
+      NAV_LAND
+      NAV_TAKEOFF
+      NAV_HOME
+      NAV_LAND
+      */
       //One second expressed in nanoseconds
       const float ONE_SEC_NS = 1000000000.0;
       // Take off

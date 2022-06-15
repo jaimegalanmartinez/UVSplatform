@@ -1,5 +1,82 @@
 import Mission from "../models/Mission.js"
 import axios from 'axios';
+import MissionPlan from "../models/MissionPlan.js";
+
+      /* MISSION DRONE
+      NAV_TAKEOFF - Automatically
+      NAV_WAYPOINT
+      //In place for measure
+      NAV_LAND
+      NAV_TAKEOFF
+      NAV_HOME
+      NAV_LAND
+
+      export const missionPlanSchema = new mongoose.Schema({
+    name: {
+      type: String,
+      required: true,
+      trim: true  
+    },
+
+    vehicles_supported: {
+        type: String,
+        required: true,
+        trim: true
+    },
+
+    mission_commands: {
+        type: [missionCommandSchema]
+    },
+
+},{
+    versionKey: false,
+    timestamps: true,
+    collection: "missionsPlans"
+});
+      */
+
+//solicitada, aceptada, en progreso, abortada, completada. missiones
+const missionCommands = [
+    {
+        name: "NAV_TAKEOFF",
+        description: "The drone will take off from ground/hand",
+    },
+    {
+        name: "NAV_WAYPOINT",
+        description: "List of locations to which the vehicle needs to go",
+    },
+    {
+        name: "NAV_MEASURE",
+        description: "The drone will land a specific height to measure. After that, it'll get height at a given location",
+    }, 
+    {
+        name: "NAV_HOME",
+        description: "The vehicle will return home",
+    },
+    {
+        name: "NAV_LAND",
+        description: "The drone will land at a given location",
+    },
+
+];
+
+const missionPlanData = {
+    name: "Webots drone",
+    vehicles_supported: "UAV",
+    mission_commands: missionCommands
+
+};
+
+const plan1 = new MissionPlan(missionPlanData);
+
+/*newFleet.save((error) => {
+        if (error){
+            res.status(500).json("Internal server error");
+            console.log('Error, saving vehicle data', error);
+        }else{
+            console.log('Fleet data has been saved');
+        }
+    });*/
 
 export const getAllMissions = async (req, res) => {
     const missions = await Mission.find()
@@ -25,24 +102,31 @@ export const getMission = async (req, res) => {
 }
 
 export const requestMission = async (req, res) => {
-    res.json(
-        {
-            "Title": "UVS Platform"
-        }
-    );
+    console.log(req.body);
+    //req.body is a JSON with the MissionPlan.
+    const missionData = {
+        mission_id: 1,//autogenerate
+        
+        mission_plan: req.body
+    };
+    res.status(201).json(`Created a new mission with the following mission plan requested: ${req.body.name}`);
 
     //Send mission plan to Vehicle Manager
 
 }
 
-export const abortMission = async (req, res) => {
-    res.json(
-        {
-            "Title": "UVS Platform"
+/*export const abortMission = async (req, res) => {
+    await plan1.save((error) => {
+        if (error){
+            res.status(500).json('Internal server error');
+            console.log('Error, saving vehicle data', error);
+        }else{
+            console.log('Plan data has been saved');
         }
-    );
+    });
+    
 
-}
+}*/
 
 export const getMissionsStatus = async (req, res) => {
     res.json(
@@ -54,11 +138,18 @@ export const getMissionsStatus = async (req, res) => {
 }
 
 export const getMissionsAvailables = async (req, res) => {
-    res.json(
-        {
-            "Title": "UVS Platform"
-        }
-    );
+    console.log(req.params.typeVehicle);
+    let typeVehicle = req.params.typeVehicle === 'UAV' ? 'UAV': 'UGV';
+   
+    MissionPlan.find({ vehicles_supported: typeVehicle })
+    .then((data) =>{
+        console.log('Data', data);
+        res.json(data);
+
+    }).catch( (error) => {
+        console.log('error ', error);
+        res.status(500).json("Cannot retrieve the missions availables")
+    });
 
 }
 

@@ -56,7 +56,12 @@ export const getVehicleInformation = async (req, res) => {
 
 }
   
-
+//comandos capaz de ejecutar un vehiculo incluirlo como array en un parámetro. el mission manager gestiona y hace el chequeo.
+//que ocurre si un vehiculo tiene que abortar la mision parcial (alguien decide si saltar comandos o continuar)
+// planificador de problemas o completamente
+//Dron detecta error el fleet manager e informa al mission manager de que la mision ha sido abortada y vuelve a casa y aterriza.
+//abortar por colision o por sin bateria, gestor flota recibe: vehiculo volver automaticamente o atterizar, no puedo ejecutar por medir: pues aterriza
+// vuelve a casa.
 export const checkAvailability = async (req, res) => {
     Vehicle.find({ vehicle_status: "idle"}).populate({path:"fleet_id", select:'fleet_name'})
     .then((data) =>{

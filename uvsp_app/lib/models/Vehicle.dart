@@ -25,7 +25,6 @@ class Vehicle {
   });
 
   factory Vehicle.fromJson(Map<String, dynamic> json){
-    //Check about fleet_id field, not retrieving from mongo
     return Vehicle(
         id: json['vehicle_id'],
         type: VehicleType.values.byName(json['vehicle_type'].toString().toLowerCase()),

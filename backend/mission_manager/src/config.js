@@ -7,8 +7,7 @@ const __dirname = new URL('.', import.meta.url).pathname;
 config({path:__dirname + '/.env'});
 
 export default {
-    databaseURI: "mongodb://"+ process.env.COSMOSDB_USER + ":" + process.env.COSMOSDB_PASSWORD + "@"+ process.env.COSMOSDB_HOST + ":" + 
-                process.env.COSMOSDB_PORT + "/"+process.env.COSMOSDB_DBNAME+"?ssl=true&retrywrites=false&maxIdleTimeMS=120000&appName=@" + process.env.COSMOSDB_USER + "@",
+    databaseURI: "mongodb+srv://" + process.env.ATLASDB_USER + ":" + process.env.ATLASDB_PASSWORD + "@uvs-cluster.am9a2cl.mongodb.net/uvs-missions?retryWrites=true&w=majority",
     fbAdminPrivateKey: process.env.FIREBASE_ADMIN_PRIVATE_KEY,
     fbAdminClientEmail: process.env.FIREBASE_ADMIN_CLIENT_EMAIL,
     fbAdminProjectId: process.env.FIREBASE_ADMIN_PROJECT_ID

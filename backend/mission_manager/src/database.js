@@ -11,12 +11,16 @@ let connectToDB;
         useUnifiedTopology: true,
         retryWrites: false
     }).then((data) => {
-        console.log('Connection to CosmosDB successful')
+        console.log('Connection to UVS-missions successful')
         connectToDB = data;
         return data;
     }).catch((err) => console.log(err));
 
 })();
+
+mongoose.connection.on('connected', () => {
+    console.log('Mongoose is connected to ATLAS')
+});
 
 /*console.log(connectToDB);
 export default {

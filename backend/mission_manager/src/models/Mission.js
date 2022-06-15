@@ -1,19 +1,5 @@
 import mongoose from "mongoose";
-
-const missionCommand = new mongoose.Schema({
-    name: {
-      type: String,
-      required: true,
-      trim: true  
-    },
-
-    missionOrder: {
-        type: Number,
-        required: true,
-
-    },
-
-});
+import * as MissionPlan from "../models/MissionPlan.js";
 
 const missionSchema = new mongoose.Schema({
     mission_id: {
@@ -42,8 +28,9 @@ const missionSchema = new mongoose.Schema({
 
     },
 
-    mission_commands: {
-        type: [missionCommand]
+    mission_plan: {
+        type: MissionPlan.missionPlanSchema,
+        required: true
     },
 
     mission_status: {

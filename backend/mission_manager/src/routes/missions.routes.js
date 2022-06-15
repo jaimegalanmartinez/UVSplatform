@@ -22,13 +22,13 @@ router.get('/', (req, res) => {
 router.post('/missions/requestMission', FirebaseMiddleware.authenticateJWT, MissionManager.requestMission);
 
 // Abort a mission
-router.post('/missions/abortMission',FirebaseMiddleware.authenticateJWT, MissionManager.abortMission);
+//router.get('/missions/abortMission', FirebaseMiddleware,authenticateJWT, MissionManager.abortMission);
 
 // Get missions status
-router.get('/missions/getStatus',FirebaseMiddleware.authenticateJWT, MissionManager.getMissionsStatus);
+//router.get('/missions/getStatus',FirebaseMiddleware.authenticateJWT, MissionManager.getMissionsStatus);
 
 // Get missions availables for an unmanned vehicle
-router.get('/missions/getMissionsAvailables', FirebaseMiddleware.authenticateJWT, MissionManager.getMissionsAvailables);
+router.get('/missions/missionsAvailables/:typeVehicle', FirebaseMiddleware.authenticateJWT, MissionManager.getMissionsAvailables);
 
 // Get vehicles availables for requesting a mission
 router.get('/missions/vehiclesAvailables', FirebaseMiddleware.authenticateJWT, MissionManager.getVehiclesAvailables);
