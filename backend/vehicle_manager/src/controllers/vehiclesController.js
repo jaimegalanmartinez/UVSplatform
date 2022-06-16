@@ -1,6 +1,8 @@
 import Vehicle from "../models/Vehicle.js"
 import Fleet from "../models/Fleet.js"
 import mongoose from "mongoose";
+import * as FleetInterface from "../fleets_interface.js";
+const rclnodejs = require('rclnodejs');
 
 const vehicleData = {
     fleet_id: mongoose.mongo.ObjectId("62a4b9fdaec3727326e3069a"),
@@ -127,7 +129,10 @@ export const sendMissionToFleetManager = async (req, res) => {
     console.log('VEHICLE MANAGER: RECEIVING MISSION');
     //req.body contains a json with the data of the mission requested
     console.log(req.body);
-    //Vehicle.findByIdAndUpdate(req.body.vehicle_id, {vehicle_status: ""})
+    //Vehicle.findByIdAndUpdate(req.body.vehicle_id, {vehicle_status: ""})"
+    FleetInterface.hola("Hello from Fleet Interface module");
+    FleetInterface.publish("mission msg from fleet interface");
+    
     res.status(200).json(
         {
             "VEHICLE MANAGER notification": `Received the mission: ${req.body.mission_id}`
