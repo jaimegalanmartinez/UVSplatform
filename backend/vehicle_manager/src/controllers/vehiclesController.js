@@ -15,7 +15,7 @@ const vehicle2Data = {
     fleet_id: 2,
     vehicle_id: 2,
     vehicle_type: "UGV",
-    vehicle_status: "on-mission",
+    vehicle_status: "onMission",
     vehicle_name: "UGV_1",
     battery: 80,
 };
@@ -119,6 +119,21 @@ export const abortMission = async (req, res) => {
             console.log('Fleet data has been saved');
         }
     });*/
+   
+
+}
+
+export const sendMissionToFleetManager = async (req, res) => {
+    console.log('VEHICLE MANAGER: RECEIVING MISSION');
+    //req.body contains a json with the data of the mission requested
+    console.log(req.body);
+    //Vehicle.findByIdAndUpdate(req.body.vehicle_id, {vehicle_status: ""})
+    res.status(200).json(
+        {
+            "VEHICLE MANAGER notification": `Received the mission: ${req.body.mission_id}`
+        } 
+    );
+   
    
 
 }

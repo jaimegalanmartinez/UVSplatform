@@ -47,7 +47,7 @@ class _RequestMissionScreenState extends State<RequestMissionScreen> {
                 onRefresh: () async {
                   _refreshListMissions();
                 },
-                child: buildListMissionsAvailables(context, missionsAvailables!, httpService)),
+                child: buildListMissionsAvailables(context, missionsAvailables!, httpService, widget.vehicleSelected)),
           );
         } else if (snapshot.hasError) {
           return RefreshIndicator(color: const Color.fromRGBO(58, 66, 86, 1.0),

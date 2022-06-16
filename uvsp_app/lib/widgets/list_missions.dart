@@ -6,7 +6,7 @@ import 'package:uvsp_app/screens/request_mission_screen.dart';
 import 'package:uvsp_app/services/http_service.dart';
 
 ListView buildListMissionsAvailables(
-    BuildContext context, List<MissionPlan> missions, HttpService httpService) {
+    BuildContext context, List<MissionPlan> missions, HttpService httpService, Vehicle vehicleSelected) {
   return ListView.separated(
     separatorBuilder: (context, index) => const SizedBox(
       height: 12,
@@ -46,7 +46,7 @@ ListView buildListMissionsAvailables(
                       MaterialStateProperty.all<Size>(const Size(140, 40))),
               onPressed: () async {
 
-                httpService.requestMission(missions[index]);
+                httpService.requestMission(missions[index], vehicleSelected);
               },
               child: const Text(
                 "Request this mission plan",

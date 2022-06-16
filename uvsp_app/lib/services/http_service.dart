@@ -107,7 +107,7 @@ class HttpService {
   }
 
   //Requests the creation of a mission for a specific mission plan
-  Future<String> requestMission(MissionPlan missionPlan) async {
+  Future<String> requestMission(MissionPlan missionPlan, Vehicle vehicleSelected) async {
     final auth = await _authInstance.currentUser!.getIdTokenResult();
     String userToken = auth.token!;
 
@@ -119,7 +119,7 @@ class HttpService {
             HttpHeaders.contentTypeHeader:'application/json'
 
           },
-      body: jsonEncode(missionPlan.toJson()));
+      body: _createMissionJSONresponse(missionPlan, vehicleSelected));
       if (response.statusCode == 201) {
         // If the server did return a 201 CREATED response,
         // then parse the JSON.
@@ -128,7 +128,7 @@ class HttpService {
       } else {
         // If the server did not return a 201 CREATED response,
         // then throw an exception.
-        throw Exception('Failed to create album.');
+        throw Exception('Failed to create mission.');
       }
 
     } catch (error) {
@@ -141,5 +141,11 @@ class HttpService {
       }
     }
 
+  }
+  String _createMissionJSONresponse(MissionPlan missionPlan, Vehicle vehicleSelected){
+    var data = missionPlan.toJson();
+    data['vehicle_id'] = vehicleSelected.id;
+    data['fleet_id'] = vehicleSelected.fleetId;
+    return json.encode(data);
   }
 }

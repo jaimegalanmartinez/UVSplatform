@@ -3,7 +3,7 @@ import * as MissionPlan from "../models/MissionPlan.js";
 
 const missionSchema = new mongoose.Schema({
     mission_id: {
-        type: Number,
+        type: String,
         required: true,
         trim: true
     },
@@ -15,14 +15,14 @@ const missionSchema = new mongoose.Schema({
     },
 
     fleet_id: {
-        type: Number,
+        type: String,
         required: true,
         trim: true
 
     },
 
     vehicle_id: {
-        type: Number,
+        type: String,
         required: true,
         trim: true
 
@@ -37,14 +37,12 @@ const missionSchema = new mongoose.Schema({
         type: String,
         required: true,
         trim: true,
-        default: "Requested"
+        default: 'requested'
 
     },
 
     startedAt: {
         type: Date,
-        required: true,
-
     },
 
     endedAt: {

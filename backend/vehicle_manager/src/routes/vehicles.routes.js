@@ -4,11 +4,15 @@ import * as VehicleManager from '../controllers/vehiclesController.js'
 const router = Router();
 
 // Vehicles API
-// Request a mission
+
+// Receive a mission from the Mission Manager, and send it to the specific fleet manager
+router.post('/vehicles/receiveMission', VehicleManager.sendMissionToFleetManager);
+
+//Check vehicles availability
 router.get('/vehicles/checkAvailability', VehicleManager.checkAvailability);
 
 // Abort a mission
-router.get('/vehicles/abortMission', VehicleManager.abortMission);
+//router.get('/vehicles/abortMission', VehicleManager.abortMission);
 
 router.get('/vehicles/info/:id', VehicleManager.getVehicleInformation);
 
