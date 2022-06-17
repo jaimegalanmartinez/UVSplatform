@@ -82,12 +82,14 @@ WORKDIR /ros2_ws
 RUN source /opt/ros/galactic/setup.bash && colcon build && \
     echo "source /opt/ros/galactic/setup.bash" >> ~/.bashrc
 
-#Copy uvs_pkg to src folder
+#Copy uvs_pkg and uvs_fleet_manager to src folder
 ADD ros2_modules/uvs_pkg src/uvs_pkg
+ADD ros2_modules/uvs_fleet_manager src/uvs_fleet_manager
 
 # Build uvs_pkg
-RUN source /opt/ros/galactic/setup.bash && colcon build --packages-select uvs_pkg
-
+RUN source /opt/ros/galactic/setup.bash && colcon build --packages-select uvs_pkg uvs_fleet_manager
+# Build uvs_fleet_manager
+#RUN source /opt/ros/galactic/setup.bash && colcon build --packages-select uvs_fleet_manager
 # Local environment setup
 RUN . install/local_setup.bash
 

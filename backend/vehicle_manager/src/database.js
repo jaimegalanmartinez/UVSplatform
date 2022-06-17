@@ -1,15 +1,6 @@
 import config from './config.js';
 import mongoose from 'mongoose';
 
-/*const { MongoClient, ServerApiVersion } = require('mongodb');
-const client = new MongoClient(config.databaseURI, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
-client.connect(err => {
-  const collection = client.db("uvs-vehicles").collection("vehicles");
-  // perform actions on the collection object
-  client.close();
-});
-*/
-
 (async () => {
     console.log(config.databaseURI);
     const db = await mongoose.connect(config.databaseURI, {
