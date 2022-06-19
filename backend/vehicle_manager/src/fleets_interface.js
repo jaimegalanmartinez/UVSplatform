@@ -24,7 +24,7 @@ const fleet_id = '62a4b9fdaec3727326e3069a'; //Fleet Webots
 
 
 
-export function hola(info){
+export function infoMessage(info){
     console.log(info);
 };
 

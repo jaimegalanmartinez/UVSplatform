@@ -9,7 +9,7 @@
 #include "geometry_msgs/msg/twist.hpp"
 
 using namespace std::chrono_literals;
-
+using std::placeholders::_1;
 /* This example creates a subclass of Node and uses std::bind() to register a
 * member function as a callback from the timer. */
 
@@ -22,6 +22,8 @@ class UVS_controller : public rclcpp::Node
     : Node("uvs_controller"), count_(0)
     {
       publisher_ = this->create_publisher<geometry_msgs::msg::Twist>("cmd_vel", 10);
+      subscription_Fleet_missionCommands= this->create_subscription<std_msgs::msg::String>(
+        "uv_webots/missionCommand", 10, std::bind(&UVS_controller::receive_mission_commands_callback, this,_1));
       //10 -depth of publisher message queue
       //timer_ = this->create_wall_timer(
       //500ms, std::bind(&UVS_controller::timer_callback, this));
@@ -34,7 +36,7 @@ class UVS_controller : public rclcpp::Node
      
       //land();
       //send_command();
-      measure_mission();
+      //measure_mission();
     }
 
   private:
@@ -48,6 +50,7 @@ class UVS_controller : public rclcpp::Node
     }*/
     //rclcpp::TimerBase::SharedPtr timer_;
     rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr publisher_;
+    rclcpp::Subscription<std_msgs::msg::String>::SharedPtr subscription_Fleet_missionCommands;
     size_t count_;
     double speed_, turn_, x_, y_, z_, th_;
     
@@ -58,6 +61,11 @@ class UVS_controller : public rclcpp::Node
       while (now < aux){ //Wait seconds duration
         now = this->get_clock()->now();
       }
+
+    }
+
+    void receive_mission_commands_callback (const std_msgs::msg::String & msg) const{
+      RCLCPP_INFO(this->get_logger(), "Received message from Fleet Manager: '%s'", msg.data.c_str());
 
     }
 
@@ -297,7 +305,7 @@ class UVS_controller : public rclcpp::Node
     //x = 0.0616
     //y = 0.0211
     //z = 0  -init in 0.78408
-    void land(){
+    /*void land(){
       auto message = geometry_msgs::msg::Twist();
       message.linear.x = 1.0;
       message.linear.y = 0.0;
@@ -318,6 +326,7 @@ class UVS_controller : public rclcpp::Node
     void take_off(){
 
     }
+    */
 };
 
 int main(int argc, char * argv[])

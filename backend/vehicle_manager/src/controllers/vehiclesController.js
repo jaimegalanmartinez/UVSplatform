@@ -129,9 +129,10 @@ export const sendMissionToFleetManager = async (req, res) => {
     console.log('VEHICLE MANAGER: RECEIVING MISSION');
     //req.body contains a json with the data of the mission requested
     console.log(req.body);
-    //req.body.fleet_id
-    //Vehicle.findByIdAndUpdate(req.body.vehicle_id, {vehicle_status: ""})"
-    FleetInterface.hola("Hello from Fleet Interface module");
+    //Delete field description of all mission commands
+    req.body.mission_plan.mission_commands.forEach(element => delete element.description);
+    
+    FleetInterface.infoMessage("Hello from Fleet Interface module");
     FleetInterface.publish(JSON.stringify(req.body), `fleet_${req.body.fleet_id}/missionPlan`);
     
     res.status(200).json(
