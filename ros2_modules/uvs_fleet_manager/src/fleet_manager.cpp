@@ -23,6 +23,9 @@ class Fleet_manager : public rclcpp::Node
       //publisher_ = this->create_publisher<geometry_msgs::msg::Twist>("cmd_vel", 10);
       subscription_VM_MissionPlan = this->create_subscription<std_msgs::msg::String>(
         "fleet_62a4b9fdaec3727326e3069a/missionPlan", 10, std::bind(&Fleet_manager::receive_mission_plan_callback, this,_1));
+
+      subscription_UVS_webots_mission = this->create_subscription<std_msgs::msg::String>(
+        "uv_webots/missionStatus", 10, std::bind(&Fleet_manager::receive_mission_status_callback, this,_1));
       
       publisher_UVS_mission_command = this->create_publisher<std_msgs::msg::String>("uv_webots/missionCommand", 10);
      
@@ -36,6 +39,9 @@ class Fleet_manager : public rclcpp::Node
     rclcpp::Publisher<std_msgs::msg::String>::SharedPtr publisher_UVS_status;
 
     rclcpp::Subscription<std_msgs::msg::String>::SharedPtr subscription_VM_MissionPlan;
+    rclcpp::Subscription<std_msgs::msg::String>::SharedPtr subscription_UVS_webots_mission;
+    //Vector storing the mission commands received
+    std::vector<std::string> commands_array;
   
     void receive_mission_plan_callback(const std_msgs::msg::String & msg) const
     {
@@ -48,7 +54,7 @@ class Fleet_manager : public rclcpp::Node
         short int number_commands = mission_received_json["mission_plan"]["mission_commands"].size();
         
         //Vector storing the mission commands received
-        std::vector<std::string> commands_array;
+        //std::vector<std::string> commands_array;
 
         //Fill vector with the commands retrieved from the mission
         for (auto& command : mission_received_json["mission_plan"]["mission_commands"].items()){
@@ -65,15 +71,31 @@ class Fleet_manager : public rclcpp::Node
         }
         
         auto message = std_msgs::msg::String();
-        message.data = "Fleet manager: Hello UVS controller";
+        //message.data = std::string("Fleet manager: ") + commands_array[0].c_str();
+        message.data = commands_array[0].c_str();
         RCLCPP_INFO(this->get_logger(), "Publishing: '%s'", message.data.c_str());
         publisher_UVS_mission_command->publish(message);
         
     }
-    
 
+    void receive_mission_status_callback(const std_msgs::msg::String & msg) const
+    {   
+        RCLCPP_INFO(this->get_logger(), "Received mission status from UVS Controller: %s", msg.data.c_str());
+        
+        if(msg.data == "NAV_WAYPOINT command executed successfully"){
+          RCLCPP_INFO(this->get_logger(), "Sending NAV_MEASURE command %s", msg.data.c_str());
+          //publisher_UVS_mission_command->publish(message);
 
-  
+        }else if(msg.data == "NAV_MEASURE command executed successfully"){
+          RCLCPP_INFO(this->get_logger(), "MEASURE Comparison ok %s", msg.data.c_str());
+
+        }else if(msg.data == "webots mission finished"){
+          RCLCPP_INFO(this->get_logger(), "Comparison ok %s", msg.data.c_str());
+
+        }
+        
+
+    }
     
     void wait_for_sec(int32_t seconds){
       rclcpp::Time now = this->get_clock()->now();
