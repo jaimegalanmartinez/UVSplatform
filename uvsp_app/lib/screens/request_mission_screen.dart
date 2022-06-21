@@ -38,8 +38,6 @@ class _RequestMissionScreenState extends State<RequestMissionScreen> {
         // if(snapshot.connectionState == ConnectionState.done){
         if (snapshot.hasData) {
           final List<MissionPlan>? missionsAvailables = snapshot.data;
-
-          print("hola");
           print(snapshot.data);
           return Expanded(
             child: RefreshIndicator(

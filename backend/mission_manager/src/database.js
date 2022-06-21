@@ -4,7 +4,7 @@ import config from './config.js';
 let connectToDB;
 
 (connectToDB = async () => {
-    console.log(config.databaseURI);
+    //console.log(config.databaseURI);
     const db = await mongoose.connect(config.databaseURI, {
         tls: true,
         useNewUrlParser: true,

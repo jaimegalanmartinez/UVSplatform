@@ -28,6 +28,8 @@ class Fleet_manager : public rclcpp::Node
         "uv_webots/missionStatus", 10, std::bind(&Fleet_manager::receive_mission_status_callback, this,_1));
       
       publisher_UVS_mission_command = this->create_publisher<std_msgs::msg::String>("uv_webots/missionCommand", 10);
+
+      publisher_VM_fleetStatus = this->create_publisher<std_msgs::msg::String>("fleetStatus_62a4b9fdaec3727326e3069a", 10);
      
     }
 
@@ -36,14 +38,14 @@ class Fleet_manager : public rclcpp::Node
 
     rclcpp::Publisher<std_msgs::msg::String>::SharedPtr publisher_VM_fleetStatus;
     rclcpp::Publisher<std_msgs::msg::String>::SharedPtr publisher_UVS_mission_command;
-    rclcpp::Publisher<std_msgs::msg::String>::SharedPtr publisher_UVS_status;
+    //rclcpp::Publisher<std_msgs::msg::String>::SharedPtr publisher_UVS_status;
 
     rclcpp::Subscription<std_msgs::msg::String>::SharedPtr subscription_VM_MissionPlan;
     rclcpp::Subscription<std_msgs::msg::String>::SharedPtr subscription_UVS_webots_mission;
     //Vector storing the mission commands received
     std::vector<std::string> commands_array;
   
-    void receive_mission_plan_callback(const std_msgs::msg::String & msg) const
+    void receive_mission_plan_callback(const std_msgs::msg::String & msg) 
     {
         auto mission_received_json = json::parse(msg.data.c_str());
         std::string vehicle_id = mission_received_json["vehicle_id"].dump();
@@ -54,8 +56,8 @@ class Fleet_manager : public rclcpp::Node
         short int number_commands = mission_received_json["mission_plan"]["mission_commands"].size();
         
         //Vector storing the mission commands received
-        //std::vector<std::string> commands_array;
-
+        //Assure the array of commands is empty
+        commands_array.clear();
         //Fill vector with the commands retrieved from the mission
         for (auto& command : mission_received_json["mission_plan"]["mission_commands"].items()){
             commands_array.emplace_back(command.value()["name"].dump());
@@ -67,31 +69,54 @@ class Fleet_manager : public rclcpp::Node
         RCLCPP_INFO(this->get_logger(), "with %d commands:", number_commands);
         //Print all commands stored in commands_array (std::vector)
         for (uint8_t i = 0; i < commands_array.size(); i++){
+          //https://stackoverflow.com/questions/20326356/how-to-remove-all-the-occurrences-of-a-char-in-c-
+          //Delete "" from all elements in commands_array
+          commands_array[i].erase(std::remove(commands_array[i].begin(), commands_array[i].end(), '"'), commands_array[i].end());
            RCLCPP_INFO(this->get_logger(), "c%d: %s", i, commands_array[i].c_str());
         }
         
         auto message = std_msgs::msg::String();
         //message.data = std::string("Fleet manager: ") + commands_array[0].c_str();
         message.data = commands_array[0].c_str();
-        RCLCPP_INFO(this->get_logger(), "Publishing: '%s'", message.data.c_str());
+        RCLCPP_INFO(this->get_logger(), "Publishing: %s", message.data.c_str());
         publisher_UVS_mission_command->publish(message);
         
+      
     }
 
-    void receive_mission_status_callback(const std_msgs::msg::String & msg) const
+    void receive_mission_status_callback(const std_msgs::msg::String & msg)
     {   
+        auto messageToVehicle = std_msgs::msg::String();
         RCLCPP_INFO(this->get_logger(), "Received mission status from UVS Controller: %s", msg.data.c_str());
-        
-        if(msg.data == "NAV_WAYPOINT command executed successfully"){
-          RCLCPP_INFO(this->get_logger(), "Sending NAV_MEASURE command %s", msg.data.c_str());
-          //publisher_UVS_mission_command->publish(message);
+
+        if(msg.data == "NAV_TAKEOFF command executed successfully"){
+          RCLCPP_INFO(this->get_logger(), "Sending NAV_WAYPOINT command");
+          messageToVehicle.data = commands_array[1].c_str();
+          publisher_UVS_mission_command->publish(messageToVehicle);
+          //Send message to vehicle manager that the mission is running
+          auto messageToVM = std_msgs::msg::String();
+          messageToVM.data = std::string("webots mission is running");
+          publisher_VM_fleetStatus->publish(messageToVM);
+
+        }else if(msg.data == "NAV_WAYPOINT command executed successfully"){
+          RCLCPP_INFO(this->get_logger(), "Sending NAV_MEASURE command");
+          messageToVehicle.data = commands_array[2].c_str();
+          publisher_UVS_mission_command->publish(messageToVehicle);
 
         }else if(msg.data == "NAV_MEASURE command executed successfully"){
-          RCLCPP_INFO(this->get_logger(), "MEASURE Comparison ok %s", msg.data.c_str());
+          RCLCPP_INFO(this->get_logger(), "Sending NAV_HOME command");
+          messageToVehicle.data = commands_array[3].c_str();
+          publisher_UVS_mission_command->publish(messageToVehicle);
+
+        }else if(msg.data == "NAV_HOME command executed successfully"){
+          RCLCPP_INFO(this->get_logger(), "Sending NAV_LAND command");
+          messageToVehicle.data = commands_array[4].c_str();
+          publisher_UVS_mission_command->publish(messageToVehicle);
 
         }else if(msg.data == "webots mission finished"){
-          RCLCPP_INFO(this->get_logger(), "Comparison ok %s", msg.data.c_str());
-
+          auto messageToVM = std_msgs::msg::String();
+          messageToVM.data = std::string("webots mission finished");
+          publisher_VM_fleetStatus->publish(messageToVM);
         }
         
 

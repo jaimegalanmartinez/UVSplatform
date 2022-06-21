@@ -2,7 +2,7 @@ import config from './config.js';
 import mongoose from 'mongoose';
 
 (async () => {
-    console.log(config.databaseURI);
+    //console.log(config.databaseURI);
     const db = await mongoose.connect(config.databaseURI, {
         tls: true,
         useNewUrlParser: true,
