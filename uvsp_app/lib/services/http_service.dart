@@ -8,7 +8,8 @@ import '../models/Vehicle.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class HttpService {
-  static const String uriMissionManager = "http://192.168.1.14:3000";
+  //static const String uriMissionManager = "http://192.168.1.14:3000";
+  static const String uriMissionManager = "http://192.168.43.74:3000";
   final FirebaseAuth _authInstance = FirebaseAuth.instance;
 
   Future<String?> _getFirebaseToken() async {
