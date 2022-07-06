@@ -10,11 +10,12 @@
 
 using namespace std::chrono_literals;
 using std::placeholders::_1;
-/* This example creates a subclass of Node and uses std::bind() to register a
-* member function as a callback from the timer. */
 
-//Twist  -> Velocity in 3-dimensional free space broken into its linear and angular parts.
-//UVS (Unmanned vehicle system)
+/** UVS (Unmanned vehicle system) Controller - ROS2 Node
+  * @author: Jaime Galán Martínez
+  * Type of messages sent to the simulated drone:
+  * Twist  -> Velocity in 3-dimensional free space broken into its linear and angular parts.
+  */
 class UVS_controller : public rclcpp::Node
 {
   public:
@@ -45,7 +46,7 @@ class UVS_controller : public rclcpp::Node
     void receive_mission_commands_callback (const std_msgs::msg::String & msg) {
       auto mission_status = std_msgs::msg::String();
       auto speed_vehicle = geometry_msgs::msg::Twist();
-      const float ONE_SEC_NS = 1000000000.0;
+      //const float ONE_SEC_NS = 1000000000.0;
       rclcpp::Time init_mission_time;
       rclcpp::Time end_mission_time;
 
@@ -75,8 +76,8 @@ class UVS_controller : public rclcpp::Node
       }else if(msg.data == "NAV_LAND"){
         command_nav_land(speed_vehicle);
         end_mission_time = this->get_clock()->now();
-        RCLCPP_INFO(this->get_logger(), "Mission executed in: %f s", (end_mission_time.nanoseconds()-init_mission_time.nanoseconds())/ONE_SEC_NS);
-      
+        //RCLCPP_INFO(this->get_logger(), "Mission executed in: %f s", (end_mission_time.nanoseconds()-init_mission_time.nanoseconds())/ONE_SEC_NS);
+        RCLCPP_INFO(this->get_logger(), "Mission executed");
         mission_status.data = "webots mission finished";
         publisher_mission_status->publish(mission_status);
 
@@ -87,7 +88,7 @@ class UVS_controller : public rclcpp::Node
     
     void measure_mission(){
       auto mission_status = std_msgs::msg::String();
-      const float ONE_SEC_NS = 1000000000.0;
+      //const float ONE_SEC_NS = 1000000000.0;
       auto speed_vehicle = geometry_msgs::msg::Twist();
       rclcpp::Time init_mission_time = this->get_clock()->now();
       //commands to be executed
@@ -106,7 +107,8 @@ class UVS_controller : public rclcpp::Node
       //NAV_LAND
       command_nav_land(speed_vehicle);
       rclcpp::Time end_mission_time = this->get_clock()->now();
-      RCLCPP_INFO(this->get_logger(), "Mission executed in: %f s", (end_mission_time.nanoseconds()-init_mission_time.nanoseconds())/ONE_SEC_NS);
+      //RCLCPP_INFO(this->get_logger(), "Mission executed in: %f s", (end_mission_time.nanoseconds()-init_mission_time.nanoseconds())/ONE_SEC_NS);
+      RCLCPP_INFO(this->get_logger(), "Mission executed");
       
       mission_status.data = "webots mission finished";
       publisher_mission_status->publish(mission_status);
@@ -194,7 +196,7 @@ class UVS_controller : public rclcpp::Node
       publisher_vehicle->publish(message);
       wait_for_sec(1);
       //Turn left
-      message.angular.z = 0.61;
+      message.angular.z = 0.616; //0.61
       RCLCPP_INFO(this->get_logger(), "Publishing: '%f'", message.linear.z);
       publisher_vehicle->publish(message);
       wait_for_sec(8);
@@ -216,31 +218,32 @@ class UVS_controller : public rclcpp::Node
       RCLCPP_INFO(this->get_logger(), "Publishing: '%f'", message.linear.x);
       publisher_vehicle->publish(message);
       //wait_for_sec(3);
-      wait_for_sec(5);
+      wait_for_sec(3.45); //3.49. 5
       //Stop
       message.linear.x = 0.0;
       RCLCPP_INFO(this->get_logger(), "Publishing: '%f'", message.linear.x);
       publisher_vehicle->publish(message);
       wait_for_sec(1);
 
-      /*//Turn right
-      message.angular.z = -0.368;
+      //Turn left
+      //message.angular.z = -0.368; //0.388
+      message.angular.z = 0.40; //0.386
       RCLCPP_INFO(this->get_logger(), "Publishing: '%f'", message.angular.z);
       publisher_vehicle->publish(message);
-      wait_for_sec(3);
+      wait_for_sec(4);
 
        //Stop
       message.angular.z = 0.0;
       RCLCPP_INFO(this->get_logger(), "Publishing: '%f'", message.angular.z);
       publisher_vehicle->publish(message);
       wait_for_sec(1);
-
+      
       //Move forward
       message.linear.y = 0;
-      message.linear.x = 1.88;
+      message.linear.x = 0.942; //0.912 1. 0.962
       RCLCPP_INFO(this->get_logger(), "Publishing: '%f'", message.linear.x);
       publisher_vehicle->publish(message);
-      wait_for_sec(4);
+      wait_for_sec(1);
       //wait_for_sec(6);
 
        //Stop
@@ -248,7 +251,7 @@ class UVS_controller : public rclcpp::Node
       RCLCPP_INFO(this->get_logger(), "Publishing: '%f'", message.linear.x);
       publisher_vehicle->publish(message);
       wait_for_sec(2);
-      */
+      
     }
 
     void command_nav_land(geometry_msgs::msg::Twist &message){
@@ -258,8 +261,14 @@ class UVS_controller : public rclcpp::Node
       RCLCPP_INFO(this->get_logger(), "Publishing: '%f'", message.linear.z);
       publisher_vehicle->publish(message);
       wait_for_sec(4);
-
-      //Move left
+       //Stop
+      message.linear.z = 0.0;
+      message.linear.y = 0.0;
+      RCLCPP_INFO(this->get_logger(), "Publishing: '%f'", message.linear.y);
+      publisher_vehicle->publish(message);
+      wait_for_sec(2);
+     /*
+      //Move right
       message.linear.y = 0.16;
       RCLCPP_INFO(this->get_logger(), "Publishing: '%f'", message.linear.y);
       publisher_vehicle->publish(message);
@@ -271,18 +280,31 @@ class UVS_controller : public rclcpp::Node
       RCLCPP_INFO(this->get_logger(), "Publishing: '%f'", message.linear.y);
       publisher_vehicle->publish(message);
       wait_for_sec(2);
-
+      */
       //Turn right to back to initial position
-      message.angular.z = -0.75;
+      message.angular.z = 0.754; //0.75
       RCLCPP_INFO(this->get_logger(), "Publishing: '%f'", message.angular.z);
       publisher_vehicle->publish(message);
-      wait_for_sec(6.8);
+      wait_for_sec(4); //6.8
 
       //Turn right to back to initial position
       message.angular.z = 0.0;
       RCLCPP_INFO(this->get_logger(), "Publishing: '%f'", message.angular.z);
       publisher_vehicle->publish(message);
       wait_for_sec(1);
+      /*
+      message.linear.x = 0.78;
+      RCLCPP_INFO(this->get_logger(), "Publishing: '%f'", message.linear.x);
+      publisher_vehicle->publish(message);
+      //wait_for_sec(3);
+      wait_for_sec(1); //3.49. 5
+      //Stop
+      message.linear.x = 0.0;
+      RCLCPP_INFO(this->get_logger(), "Publishing: '%f'", message.linear.x);
+      publisher_vehicle->publish(message);
+      wait_for_sec(1);
+      */
+
 
     }
       // Make a measure

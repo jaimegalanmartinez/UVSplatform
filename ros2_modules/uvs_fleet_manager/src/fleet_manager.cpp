@@ -8,12 +8,13 @@
 #include "std_msgs/msg/string.hpp"
 #include "geometry_msgs/msg/twist.hpp"
 #include <nlohmann/json.hpp>
-//https://github.com/nlohmann/json
+// Library used: https://github.com/nlohmann/json
 using json = nlohmann::json;
 using std::placeholders::_1;
 
-/*Fleet manager - ROS2 Node
-*/
+/** Fleet manager - ROS2 Node
+  * @author: Jaime Galán Martínez
+  */
 class Fleet_manager : public rclcpp::Node
 {
   public:

@@ -1,10 +1,13 @@
+/**
+ * Mission Manager - Connect to mongo DB ATLAS using mongoose at server startup.
+ * @author: Jaime Galán Martínez
+ */
 import mongoose from 'mongoose';
 import config from './config.js';
 
 let connectToDB;
 
 (connectToDB = async () => {
-    //console.log(config.databaseURI);
     const db = await mongoose.connect(config.databaseURI, {
         tls: true,
         useNewUrlParser: true,
@@ -21,8 +24,3 @@ let connectToDB;
 mongoose.connection.on('connected', () => {
     console.log('Mongoose is connected to ATLAS')
 });
-
-/*console.log(connectToDB);
-export default {
-    database: connectToDB.success()
-}*/

@@ -1,41 +1,12 @@
+/**
+ * Mission Controller - Mission Manager
+ * @author: Jaime Galán Martínez
+ */
 import Mission from "../models/Mission.js"
 import axios from 'axios';
 import MissionPlan from "../models/MissionPlan.js";
 import crypto from 'crypto';
-      /* MISSION DRONE
-      NAV_TAKEOFF - Automatically
-      NAV_WAYPOINT
-      //In place for measure
-      NAV_LAND
-      NAV_TAKEOFF
-      NAV_HOME
-      NAV_LAND
 
-      export const missionPlanSchema = new mongoose.Schema({
-    name: {
-      type: String,
-      required: true,
-      trim: true  
-    },
-
-    vehicles_supported: {
-        type: String,
-        required: true,
-        trim: true
-    },
-
-    mission_commands: {
-        type: [missionCommandSchema]
-    },
-
-},{
-    versionKey: false,
-    timestamps: true,
-    collection: "missionsPlans"
-});
-      */
-
-//solicitada, aceptada, en progreso, abortada, completada. missiones
 const missionCommands = [
     {
         name: "NAV_TAKEOFF",
@@ -69,14 +40,6 @@ const missionPlanData = {
 
 const plan1 = new MissionPlan(missionPlanData);
 
-/*newFleet.save((error) => {
-        if (error){
-            res.status(500).json("Internal server error");
-            console.log('Error, saving vehicle data', error);
-        }else{
-            console.log('Fleet data has been saved');
-        }
-    });*/
 
 export const getAllMissions = async (req, res) => {
     const missions = await Mission.find()
@@ -125,7 +88,7 @@ export const requestMission = async (req, res) => {
         mission_plan: missionPlanReceived,
         mission_status: 'requested'
     };
-    //Possible missions status: requested, accepted, running, aborted and completed (solicitada, aceptada, en progreso, abortada, completada)
+    //Possible missions status: requested, accepted, running, aborted and completed
     const missionToCreate = new Mission(missionData);
     //Create the requested mission in missions collection
     missionToCreate.save((error) => {
@@ -177,19 +140,6 @@ export const requestMission = async (req, res) => {
     }
 
 }
-
-/*export const abortMission = async (req, res) => {
-    await plan1.save((error) => {
-        if (error){
-            res.status(500).json('Internal server error');
-            console.log('Error, saving vehicle data', error);
-        }else{
-            console.log('Plan data has been saved');
-        }
-    });
-    
-
-}*/
 
 export const getMissionsStatus = async (req, res) => {
     res.json(
@@ -255,8 +205,4 @@ export const getVehiclesAvailables = async (req, res) => {
     } 
 }
 
-const _sendMissionToVehicleManager = async (req, res) => {
-    //console.log(req);
-    
-} 
 

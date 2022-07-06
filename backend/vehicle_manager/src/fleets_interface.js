@@ -1,4 +1,9 @@
-//https://github.com/RobotWebTools/rclnodejs
+/**
+ * Vehicle Manager - ROS2 Fleet interface 
+ * @author: Jaime Galán Martínez
+ * It was used the following library:
+ * - https://github.com/RobotWebTools/rclnodejs 
+ */
 
 const rclnodejs = require('rclnodejs');
 
@@ -35,8 +40,6 @@ export function infoMessage(info){
 };
 
 export function publish(message, topic){
-    //if (publisher === '')
     publisher = node.createPublisher('std_msgs/msg/String', topic);
-    //publisher.topic()
     publisher.publish(message);
 }

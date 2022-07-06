@@ -1,3 +1,7 @@
+/**
+ * Vehicle Manager - Vehicle model
+ * @author: Jaime Galán Martínez
+ */
 import mongoose from "mongoose";
 
 const vehicleSchema = new mongoose.Schema({

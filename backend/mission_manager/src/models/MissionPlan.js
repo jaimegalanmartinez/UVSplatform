@@ -1,3 +1,7 @@
+/**
+ * Mission Plan model - Mission Manager
+ * @author: Jaime Galán Martínez
+ */
 import mongoose from "mongoose";
 
 const missionCommandSchema = new mongoose.Schema({

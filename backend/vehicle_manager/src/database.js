@@ -1,8 +1,11 @@
+/**
+ * Vehicle Manager - Connect to the mongo DB ATLAS at server startup.
+ * @author: Jaime Galán Martínez
+ */
 import config from './config.js';
 import mongoose from 'mongoose';
 
 (async () => {
-    //console.log(config.databaseURI);
     const db = await mongoose.connect(config.databaseURI, {
         tls: true,
         useNewUrlParser: true,

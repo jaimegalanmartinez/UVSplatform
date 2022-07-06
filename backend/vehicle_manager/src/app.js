@@ -1,4 +1,7 @@
-
+/**
+ * Vehicle Manager - HTTP server using expressjs
+ * @author: Jaime Galán Martínez
+ */
 import express, { urlencoded, json } from 'express';
 import morgan from 'morgan';
 import VehiclesRoutes from './routes/vehicles.routes.js';

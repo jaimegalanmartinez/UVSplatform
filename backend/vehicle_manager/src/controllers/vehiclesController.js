@@ -1,3 +1,7 @@
+/**
+ * Vehicle Manager - Vehicle Manager Controller
+ * @author: Jaime Galán Martínez
+ */
 import Vehicle from "../models/Vehicle.js"
 import Fleet from "../models/Fleet.js"
 import mongoose from "mongoose";
@@ -58,12 +62,7 @@ export const getVehicleInformation = async (req, res) => {
 
 }
   
-//comandos capaz de ejecutar un vehiculo incluirlo como array en un parámetro. el mission manager gestiona y hace el chequeo.
-//que ocurre si un vehiculo tiene que abortar la mision parcial (alguien decide si saltar comandos o continuar)
-// planificador de problemas o completamente
-//Dron detecta error el fleet manager e informa al mission manager de que la mision ha sido abortada y vuelve a casa y aterriza.
-//abortar por colision o por sin bateria, gestor flota recibe: vehiculo volver automaticamente o atterizar, no puedo ejecutar por medir: pues aterriza
-// vuelve a casa.
+//Check vehicles availables and retrieve the vehicles with status "idle".
 export const checkAvailability = async (req, res) => {
     Vehicle.find({ vehicle_status: "idle"}).populate({path:"fleet_id", select:'fleet_name'})
     .then((data) =>{
@@ -102,27 +101,7 @@ export const updateFleetVehicles = async (req, res) => {
 }
 
 export const abortMission = async (req, res) => {
-    /*await Fleet.find({ fleet_name: "Fleet_Webots"}).populate({path: "fleet_vehicles"}).then((data) => {
-        res.json(data);
-    });*/
-    /*Vehicle.findByIdAndUpdate("62a1aaf7d063093f592cae21", {fleet_id: mongoose.mongo.ObjectId("62a4b9fdaec3727326e3069a")}, function (err, docs){
-        if (err){
-            console.log(err);
-        }else{
-            console.log("Updated user: ", docs);
-        }
-
-    });*/
-    /*newFleet.save((error) => {
-        if (error){
-            res.status(500).json("Internal server error");
-            console.log('Error, saving vehicle data', error);
-        }else{
-            console.log('Fleet data has been saved');
-        }
-    });*/
    
-
 }
 
 export const sendMissionToFleetManager = async (req, res) => {

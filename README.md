@@ -21,8 +21,7 @@ You should have the following prerequisites installed in order to test the proto
 
 Also you need to modify the file: uvsp_app/lib/services/http_service.dart and change the value of uriMissionManager
 to the specific IP address of the PC where is running locally the Mission Manager and Vehicle Manager.
-Example: static const String uriMissionManager = "http://IP:3000"; where IP has the following format: X.X.X.X
-As default is established my mobile phone network with IP: 192.168.43.74
+Example: static const String uriMissionManager = "http://IP:3000"; where IP has the following format: X.X.X.X. As default is established my mobile phone network with IP: 192.168.43.74
 
 ### Instructions
 Here are the detailed instructions to test the prototype:

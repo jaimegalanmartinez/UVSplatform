@@ -1,3 +1,7 @@
+/**
+ * Vehicle Manager - Vehicles API
+ * @author: Jaime Galán Martínez
+ */
 import { Router } from 'express';
 import * as VehicleManager from '../controllers/vehiclesController.js'
 
@@ -10,13 +14,5 @@ router.post('/vehicles/receiveMission', VehicleManager.sendMissionToFleetManager
 
 //Check vehicles availability
 router.get('/vehicles/checkAvailability', VehicleManager.checkAvailability);
-
-// Abort a mission
-//router.get('/vehicles/abortMission', VehicleManager.abortMission);
-
-router.get('/vehicles/info/:id', VehicleManager.getVehicleInformation);
-
-// Fleets API
-router.post('/fleets/:id/updateFleetVehicles', VehicleManager.updateFleetVehicles);
 
 export default router;

@@ -1,3 +1,7 @@
+/**
+ * Vehicle Manager - Fleet model
+ * @author: Jaime Galán Martínez
+ */
 import mongoose from "mongoose";
 
 const fleetSchema = new mongoose.Schema({

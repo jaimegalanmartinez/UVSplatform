@@ -1,3 +1,7 @@
+/**
+ * Mission Manager - Config file for environment variables (Firebase and ATLAS DB credentials).
+ * @author: Jaime Galán Martínez
+ */
 import { config } from "dotenv";
 import { URL } from 'url';
 

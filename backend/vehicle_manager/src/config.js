@@ -1,3 +1,7 @@
+/**
+ * Vehicle Manager - Config file to setup the environment variables
+ * @author: Jaime Galán Martínez
+ */
 import { config } from "dotenv";
 //import { URL } from 'url';
 

@@ -1,3 +1,7 @@
+/**
+ * Mission model - Mission Manager
+ * @author: Jaime Galán Martínez
+ */
 import mongoose from "mongoose";
 import * as MissionPlan from "../models/MissionPlan.js";
 

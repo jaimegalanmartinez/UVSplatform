@@ -1,3 +1,7 @@
+/**
+ * Mission Manager - Firebase Admin SDK Middleware
+ * @author: Jaime Galán Martínez
+ */
 import admin from 'firebase-admin';
 import config from './config.js';
 

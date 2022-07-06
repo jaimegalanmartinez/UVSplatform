@@ -1,3 +1,7 @@
+/**
+ * Missions API routes - Mission Manager
+ * @author: Jaime Galán Martínez
+ */
 import { Router } from 'express';
 import * as MissionManager from '../controllers/missionController.js'
 import * as FirebaseMiddleware from '../firebase_middleware.js';
@@ -20,12 +24,6 @@ router.get('/', (req, res) => {
 // Missions API
 // Request a mission
 router.post('/missions/requestMission', FirebaseMiddleware.authenticateJWT, MissionManager.requestMission);
-
-// Abort a mission
-//router.get('/missions/abortMission', FirebaseMiddleware,authenticateJWT, MissionManager.abortMission);
-
-// Get missions status
-//router.get('/missions/getStatus',FirebaseMiddleware.authenticateJWT, MissionManager.getMissionsStatus);
 
 // Get missions availables for an unmanned vehicle
 router.get('/missions/missionsAvailables/:typeVehicle', FirebaseMiddleware.authenticateJWT, MissionManager.getMissionsAvailables);
